@@ -25,6 +25,11 @@ output/businesses/<business-slug>/
     CYBERSECURITY.md
     VALIDATION_PLAN.md
     STATUS.md
+    LANDING_COPY.md
+    OUTREACH.md
+    DATA_MODEL.md
+    API_CONTRACT.md
+    ADMIN_OPERATIONS.md
   frontend/
     README.md
     VIEWS.md
@@ -38,10 +43,6 @@ output/businesses/<business-slug>/
   public-content/es/
 ```
 
-## Negocios iniciales
+## Total actual
 
-1. `hvac-missed-call-recovery`
-2. `property-maintenance-triage`
-3. `construction-bid-inbox`
-4. `dental-insurance-checklist`
-5. `msp-security-reporting`
+10 negocios internos en preparación.
