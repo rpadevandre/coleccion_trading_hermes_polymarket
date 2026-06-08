@@ -107,6 +107,18 @@ def write_scan_report(
             f"- Cash ficticio disponible: `${paper_summary['available_cash']:,.2f}`",
             "",
         ]
+        if "closed_positions" in paper_summary:
+            lines += [
+                "### Performance cerrada",
+                "",
+                f"- Posiciones cerradas: `{paper_summary['closed_positions']}`",
+                f"- Wins: `{paper_summary['wins']}`",
+                f"- Losses: `{paper_summary['losses']}`",
+                f"- P&L realizado: `${paper_summary['realized_pnl']:,.2f}`",
+                f"- ROI sobre stake cerrado: `{paper_summary['roi_pct']:,.2f}%`",
+                f"- Win rate: `{paper_summary['win_rate_pct']:,.2f}%`",
+                "",
+            ]
         paper_positions = paper_positions or []
         if paper_positions:
             lines += ["### Nuevas posiciones ficticias abiertas en este scan", ""]

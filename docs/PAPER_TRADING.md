@@ -112,9 +112,38 @@ Una posición ficticia se abre si:
 4. precio YES está entre 0.02 y 0.98;
 5. hay exposición disponible según risk caps.
 
+## Medición de performance
+
+El repo incluye un helper para medir el estado del portfolio ficticio:
+
+```bash
+.venv/bin/python scripts/paper_performance.py
+```
+
+Output esperado:
+
+```text
+Portfolio ficticio
+Performance cerrada
+ROI sobre stake cerrado
+Win rate
+```
+
+Para cerrar manualmente una posición ficticia cuando ya se conoce la resolución:
+
+```bash
+.venv/bin/python scripts/paper_performance.py --close-market MARKET_ID --winning-side YES
+```
+
+o:
+
+```bash
+.venv/bin/python scripts/paper_performance.py --close-market MARKET_ID --winning-side NO
+```
+
 ## Limitación actual
 
-La fase actual abre posiciones ficticias, pero todavía no las resuelve automáticamente. El siguiente paso es:
+La fase actual abre posiciones ficticias y permite cerrarlas manualmente, pero todavía no detecta automáticamente la resolución pública de cada mercado. El siguiente paso es:
 
 ```text
 tracking de resolución → cerrar posición virtual → calcular P&L simulado
@@ -132,7 +161,7 @@ Para:
 
 1. revisar posiciones abiertas;
 2. detectar mercado cerrado/resuelto;
-3. estimar exit price;
+3. identificar lado ganador;
 4. cerrar posición;
 5. calcular P&L;
 6. generar resumen de performance.

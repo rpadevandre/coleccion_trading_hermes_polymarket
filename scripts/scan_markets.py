@@ -9,7 +9,7 @@ from pathlib import Path
 
 from polymarket_research.client import PolymarketClient
 from polymarket_research.db import connect, init_db
-from polymarket_research.paper import PaperTradingConfig, maybe_open_paper_position, portfolio_summary
+from polymarket_research.paper import PaperTradingConfig, maybe_open_paper_position, performance_summary
 from polymarket_research.reporting import insert_signal, upsert_market, write_scan_report
 from polymarket_research.scorer import score_market
 
@@ -48,7 +48,7 @@ async def scan(
         scored.append((market, score))
     conn.commit()
 
-    summary = portfolio_summary(conn, bankroll=paper_bankroll) if paper else None
+    summary = performance_summary(conn, bankroll=paper_bankroll) if paper else None
     return write_scan_report(
         report_dir,
         scored,
