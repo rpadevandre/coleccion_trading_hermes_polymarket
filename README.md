@@ -22,12 +22,14 @@ Documentos principales:
 - [`ROADMAP.md`](ROADMAP.md) — roadmap de incubación técnica.
 - [`docs/LECTURA_CONTEXTO_FUENTES.md`](docs/LECTURA_CONTEXTO_FUENTES.md) — lectura operativa de `repos/`, `videos/` y síntesis.
 - [`docs/HERMES_CRON.md`](docs/HERMES_CRON.md) — diseño y registro del cronjob read-only de Hermes.
+- [`docs/PAPER_TRADING.md`](docs/PAPER_TRADING.md) — simulación interna con dinero ficticio y risk caps.
 
 Código inicial:
 
 - `src/polymarket_research/` — paquete Python del agente de investigación.
 - `scripts/scan_markets.py` — escaneo read-only de mercados activos.
 - `scripts/cron_polymarket_scan.sh` — wrapper cron-friendly para entregar el reporte por Hermes/Telegram.
+- `src/polymarket_research/paper.py` — paper trading ficticio con bankroll y límites de riesgo.
 - `tests/` — tests iniciales de modelos, scoring y SQLite WAL.
 
 Uso local inicial:
@@ -36,7 +38,7 @@ Uso local inicial:
 python3 -m venv .venv
 .venv/bin/python -m pip install -e '.[dev]'
 .venv/bin/python -m pytest tests -q
-.venv/bin/python scripts/scan_markets.py --limit 5
+.venv/bin/python scripts/scan_markets.py --limit 5 --paper
 ```
 
 Principio crítico:

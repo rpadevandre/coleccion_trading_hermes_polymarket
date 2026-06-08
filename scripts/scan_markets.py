@@ -9,11 +9,21 @@ from pathlib import Path
 
 from polymarket_research.client import PolymarketClient
 from polymarket_research.db import connect, init_db
+from polymarket_research.paper import PaperTradingConfig, maybe_open_paper_position, portfolio_summary
 from polymarket_research.reporting import insert_signal, upsert_market, write_scan_report
 from polymarket_research.scorer import score_market
 
 
-async def scan(limit: int, db_path: Path, report_dir: Path, threshold: int) -> Path:
+async def scan(
+    limit: int,
+    db_path: Path,
+    report_dir: Path,
+    threshold: int,
+    *,
+    paper: bool = False,
+    paper_bankroll: float = 1_000.0,
+    paper_min_score: int = 80,
+) -> Path:
     client = PolymarketClient()
     markets = await client.markets(limit=limit)
 
@@ -21,6 +31,8 @@ async def scan(limit: int, db_path: Path, report_dir: Path, threshold: int) -> P
     init_db(conn)
 
     scored = []
+    paper_positions = []
+    paper_config = PaperTradingConfig(bankroll=paper_bankroll, min_score=paper_min_score)
     for market in markets:
         spread = None
         if market.clob_token_ids:
@@ -29,10 +41,21 @@ async def scan(limit: int, db_path: Path, report_dir: Path, threshold: int) -> P
         upsert_market(conn, market)
         if score.total_score >= threshold:
             insert_signal(conn, market, score)
+        if paper:
+            position = maybe_open_paper_position(conn, market, score, config=paper_config)
+            if position is not None:
+                paper_positions.append(position)
         scored.append((market, score))
     conn.commit()
 
-    return write_scan_report(report_dir, scored, threshold=threshold)
+    summary = portfolio_summary(conn, bankroll=paper_bankroll) if paper else None
+    return write_scan_report(
+        report_dir,
+        scored,
+        threshold=threshold,
+        paper_positions=paper_positions,
+        paper_summary=summary,
+    )
 
 
 def main() -> None:
@@ -41,9 +64,22 @@ def main() -> None:
     parser.add_argument("--threshold", type=int, default=65, help="Minimum score for a signal")
     parser.add_argument("--db", type=Path, default=Path("data/hermes_polymarket.db"))
     parser.add_argument("--reports", type=Path, default=Path("outputs/reports"))
+    parser.add_argument("--paper", action="store_true", help="Open fictional paper-trading positions for strong signals")
+    parser.add_argument("--paper-bankroll", type=float, default=1_000.0, help="Fictional bankroll for paper trading")
+    parser.add_argument("--paper-min-score", type=int, default=80, help="Minimum score required to open a paper position")
     args = parser.parse_args()
 
-    report = asyncio.run(scan(args.limit, args.db, args.reports, args.threshold))
+    report = asyncio.run(
+        scan(
+            args.limit,
+            args.db,
+            args.reports,
+            args.threshold,
+            paper=args.paper,
+            paper_bankroll=args.paper_bankroll,
+            paper_min_score=args.paper_min_score,
+        )
+    )
     print(report)
 
 

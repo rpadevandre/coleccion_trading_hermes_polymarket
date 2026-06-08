@@ -18,7 +18,9 @@ fi
 
 LIMIT="${POLYMARKET_SCAN_LIMIT:-10}"
 THRESHOLD="${POLYMARKET_SIGNAL_THRESHOLD:-65}"
-REPORT_PATH="$(.venv/bin/python scripts/scan_markets.py --limit "$LIMIT" --threshold "$THRESHOLD")"
+PAPER_BANKROLL="${POLYMARKET_PAPER_BANKROLL:-1000}"
+PAPER_MIN_SCORE="${POLYMARKET_PAPER_MIN_SCORE:-80}"
+REPORT_PATH="$(.venv/bin/python scripts/scan_markets.py --limit "$LIMIT" --threshold "$THRESHOLD" --paper --paper-bankroll "$PAPER_BANKROLL" --paper-min-score "$PAPER_MIN_SCORE")"
 
 cat <<EOF
 # Polymarket Research Scan

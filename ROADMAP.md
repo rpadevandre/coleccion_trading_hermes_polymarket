@@ -47,6 +47,7 @@ El repo contiene una colección curada de investigación y una dirección clara 
 
 ## Fase 5 — Paper trading
 
+- [x] Registrar posiciones ficticias iniciales.
 - [ ] Registrar decisiones simuladas.
 - [ ] Medir resultado después de cierre/resolución.
 - [ ] Reporte semanal de P&L ficticio.

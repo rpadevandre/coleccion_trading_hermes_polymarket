@@ -31,8 +31,9 @@ Este script:
 2. crea `.venv` si no existe;
 3. instala dependencias del paquete si hace falta;
 4. ejecuta `scripts/scan_markets.py`;
-5. genera un reporte en `outputs/reports/`;
-6. imprime el reporte completo para delivery por Hermes.
+5. activa paper trading ficticio con risk caps;
+6. genera un reporte en `outputs/reports/`;
+7. imprime el reporte completo para delivery por Hermes.
 
 ## Variables soportadas
 
@@ -69,6 +70,7 @@ Reporte generado: outputs/reports/SCAN_YYYY-MM-DD_HHMMSS_UTC.md
 Luego incluye:
 
 - señales sobre umbral;
+- paper trading interno con dinero ficticio;
 - score;
 - recomendación `RESEARCH_CANDIDATE`, `WATCH` o `SKIP`;
 - razonamiento explicable;

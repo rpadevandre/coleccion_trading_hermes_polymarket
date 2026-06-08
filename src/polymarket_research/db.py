@@ -60,4 +60,30 @@ def init_db(conn: sqlite3.Connection) -> None:
         )
         """
     )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS paper_positions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            market_id TEXT NOT NULL,
+            side TEXT NOT NULL,
+            entry_price REAL NOT NULL,
+            stake REAL NOT NULL,
+            shares REAL NOT NULL,
+            score INTEGER NOT NULL,
+            status TEXT NOT NULL DEFAULT 'OPEN',
+            opened_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            closed_at TEXT,
+            exit_price REAL,
+            pnl REAL,
+            FOREIGN KEY (market_id) REFERENCES markets(market_id)
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_paper_positions_one_open_per_market
+        ON paper_positions(market_id)
+        WHERE status = 'OPEN'
+        """
+    )
     conn.commit()

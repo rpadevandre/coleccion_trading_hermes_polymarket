@@ -8,6 +8,7 @@ import json
 import sqlite3
 
 from .models import Market, ScoreBreakdown
+from .paper import PaperPosition
 
 
 def upsert_market(conn: sqlite3.Connection, market: Market) -> None:
@@ -57,6 +58,8 @@ def write_scan_report(
     scored_markets: list[tuple[Market, ScoreBreakdown]],
     *,
     threshold: int = 65,
+    paper_positions: list[PaperPosition] | None = None,
+    paper_summary: dict[str, float | int] | None = None,
 ) -> Path:
     report_root = Path(report_dir)
     report_root.mkdir(parents=True, exist_ok=True)
@@ -91,6 +94,30 @@ def write_scan_report(
         ]
         lines += [f"  - {reason}" for reason in score.reasoning]
         lines.append("")
+
+    if paper_summary is not None:
+        lines += [
+            "## Paper trading interno",
+            "",
+            "Modo: dinero ficticio. No hay wallets ni órdenes reales.",
+            "",
+            f"- Bankroll ficticio: `${paper_summary['bankroll']:,.2f}`",
+            f"- Posiciones abiertas: `{paper_summary['open_positions']}`",
+            f"- Exposición abierta: `${paper_summary['open_exposure']:,.2f}`",
+            f"- Cash ficticio disponible: `${paper_summary['available_cash']:,.2f}`",
+            "",
+        ]
+        paper_positions = paper_positions or []
+        if paper_positions:
+            lines += ["### Nuevas posiciones ficticias abiertas en este scan", ""]
+            for position in paper_positions:
+                lines.append(
+                    f"- `{position.side}` `{position.market_id}` — stake `${position.stake:,.2f}` "
+                    f"at `{position.entry_price:.4f}` ({position.shares:.4f} shares), score `{position.score}`"
+                )
+            lines.append("")
+        else:
+            lines += ["No se abrió ninguna posición ficticia nueva en este scan.", ""]
 
     lines += ["## Todos los mercados revisados", ""]
     for market, score in scored_markets:
