@@ -11,6 +11,41 @@ temática para revisarlo de forma más cómoda.
 
 ---
 
+## Estado actual del proyecto
+
+Este repo ya no es solo una colección de research: ahora incluye la base de un **MVP read-only de investigación Polymarket**.
+
+Documentos principales:
+
+- [`PLAN_GENERAL.md`](PLAN_GENERAL.md) — plan maestro por fases.
+- [`SPEC_MVP.md`](SPEC_MVP.md) — especificación del MVP read-only.
+- [`ROADMAP.md`](ROADMAP.md) — roadmap de incubación técnica.
+- [`docs/LECTURA_CONTEXTO_FUENTES.md`](docs/LECTURA_CONTEXTO_FUENTES.md) — lectura operativa de `repos/`, `videos/` y síntesis.
+
+Código inicial:
+
+- `src/polymarket_research/` — paquete Python del agente de investigación.
+- `scripts/scan_markets.py` — escaneo read-only de mercados activos.
+- `tests/` — tests iniciales de modelos, scoring y SQLite WAL.
+
+Uso local inicial:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/python -m pytest tests -q
+.venv/bin/python scripts/scan_markets.py --limit 5
+```
+
+Principio crítico:
+
+```text
+Este MVP no ejecuta trades, no toca wallets y no mueve dinero.
+Solo investiga, puntúa, guarda y reporta señales.
+```
+
+---
+
 ## 🎯 Lo más relevante para tu objetivo (Hermes + Polymarket)
 
 - **`videos/Using_the_New_Hermes_Agent_to_Track_Polymarket_Smart_Money.md`**
