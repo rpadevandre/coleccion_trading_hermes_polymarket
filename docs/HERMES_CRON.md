@@ -91,9 +91,11 @@ Razonamiento:
 
 ```text
 name: polymarket-research-scan
+job_id: c8486b714789
 schedule: every 6h
 mode: no_agent
-script: /home/hermes/coleccion_trading_hermes_polymarket/scripts/cron_polymarket_scan.sh
+script wrapper: ~/.hermes/scripts/polymarket_research_scan.sh
+repo script: /home/hermes/coleccion_trading_hermes_polymarket/scripts/cron_polymarket_scan.sh
 deliver: origin
 ```
 
