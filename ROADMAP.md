@@ -40,7 +40,7 @@ El repo contiene una colección curada de investigación y una dirección clara 
 
 ## Fase 4 — Hermes cron
 
-- [ ] Script de escaneo cada 6h.
+- [x] Script de escaneo cada 6h.
 - [ ] Delivery Telegram.
 - [ ] Resumen legible para Andre.
 - [ ] Sin ejecución de trades.

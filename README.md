@@ -21,11 +21,13 @@ Documentos principales:
 - [`SPEC_MVP.md`](SPEC_MVP.md) — especificación del MVP read-only.
 - [`ROADMAP.md`](ROADMAP.md) — roadmap de incubación técnica.
 - [`docs/LECTURA_CONTEXTO_FUENTES.md`](docs/LECTURA_CONTEXTO_FUENTES.md) — lectura operativa de `repos/`, `videos/` y síntesis.
+- [`docs/HERMES_CRON.md`](docs/HERMES_CRON.md) — diseño y registro del cronjob read-only de Hermes.
 
 Código inicial:
 
 - `src/polymarket_research/` — paquete Python del agente de investigación.
 - `scripts/scan_markets.py` — escaneo read-only de mercados activos.
+- `scripts/cron_polymarket_scan.sh` — wrapper cron-friendly para entregar el reporte por Hermes/Telegram.
 - `tests/` — tests iniciales de modelos, scoring y SQLite WAL.
 
 Uso local inicial:
