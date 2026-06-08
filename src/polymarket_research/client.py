@@ -61,6 +61,12 @@ class PolymarketClient:
             raise PolymarketClientError(f"Unexpected markets payload: {type(payload)!r}")
         return [Market.from_gamma(item) for item in payload]
 
+    async def market_by_slug(self, slug: str) -> Market | None:
+        payload = await self._get_json(f"{self.gamma_base_url}/markets", params={"slug": slug})
+        if isinstance(payload, list) and payload:
+            return Market.from_gamma(payload[0])
+        return None
+
     async def search(self, query: str, *, limit: int = 10) -> list[Market]:
         payload = await self._get_json(f"{self.gamma_base_url}/public-search", params={"q": query})
         markets: list[Market] = []

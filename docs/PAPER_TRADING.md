@@ -141,9 +141,30 @@ o:
 .venv/bin/python scripts/paper_performance.py --close-market MARKET_ID --winning-side NO
 ```
 
+## Auto-resolución conservadora
+
+El repo también incluye:
+
+```bash
+.venv/bin/python scripts/update_paper_positions.py
+```
+
+Hace lo siguiente:
+
+1. lee posiciones ficticias abiertas;
+2. consulta el mercado público por `slug` en Gamma;
+3. solo cierra si el mercado está `closed=true`;
+4. solo infiere ganador si los precios finales son claramente binarios:
+   - YES ≈ 1.0 y NO ≈ 0.0;
+   - o YES ≈ 0.0 y NO ≈ 1.0;
+5. calcula P&L ficticio;
+6. imprime performance.
+
+Si el resultado es ambiguo, no toca la posición.
+
 ## Limitación actual
 
-La fase actual abre posiciones ficticias y permite cerrarlas manualmente, pero todavía no detecta automáticamente la resolución pública de cada mercado. El siguiente paso es:
+La fase actual abre posiciones ficticias y puede cerrarlas automáticamente solo cuando la resolución pública es clara. El siguiente paso es mejorar la cobertura de mercados ambiguos/múltiples:
 
 ```text
 tracking de resolución → cerrar posición virtual → calcular P&L simulado
@@ -160,8 +181,8 @@ scripts/update_paper_positions.py
 Para:
 
 1. revisar posiciones abiertas;
-2. detectar mercado cerrado/resuelto;
-3. identificar lado ganador;
+2. detectar mercados cerrados/resueltos con formatos no binarios;
+3. identificar lado ganador con más fuentes;
 4. cerrar posición;
 5. calcular P&L;
 6. generar resumen de performance.

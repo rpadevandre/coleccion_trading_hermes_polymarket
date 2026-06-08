@@ -20,6 +20,7 @@ LIMIT="${POLYMARKET_SCAN_LIMIT:-10}"
 THRESHOLD="${POLYMARKET_SIGNAL_THRESHOLD:-65}"
 PAPER_BANKROLL="${POLYMARKET_PAPER_BANKROLL:-1000}"
 PAPER_MIN_SCORE="${POLYMARKET_PAPER_MIN_SCORE:-80}"
+UPDATE_OUTPUT="$(.venv/bin/python scripts/update_paper_positions.py --bankroll "$PAPER_BANKROLL")"
 REPORT_PATH="$(.venv/bin/python scripts/scan_markets.py --limit "$LIMIT" --threshold "$THRESHOLD" --paper --paper-bankroll "$PAPER_BANKROLL" --paper-min-score "$PAPER_MIN_SCORE")"
 
 cat <<EOF
@@ -33,4 +34,5 @@ Reporte generado: $REPORT_PATH
 ---
 EOF
 
+printf '%s\n\n---\n' "$UPDATE_OUTPUT"
 cat "$REPORT_PATH"

@@ -11,6 +11,7 @@ from .paper import (
     portfolio_summary,
 )
 from .scorer import score_market
+from .resolver import infer_winning_side, resolve_closed_paper_positions
 
 __all__ = [
     "Market",
@@ -22,5 +23,7 @@ __all__ = [
     "maybe_open_paper_position",
     "performance_summary",
     "portfolio_summary",
+    "infer_winning_side",
+    "resolve_closed_paper_positions",
     "score_market",
 ]

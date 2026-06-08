@@ -30,10 +30,11 @@ Este script:
 1. entra al root del repo;
 2. crea `.venv` si no existe;
 3. instala dependencias del paquete si hace falta;
-4. ejecuta `scripts/scan_markets.py`;
-5. activa paper trading ficticio con risk caps;
-6. genera un reporte en `outputs/reports/`;
-7. imprime el reporte completo para delivery por Hermes.
+4. ejecuta `scripts/update_paper_positions.py` para intentar cerrar posiciones ficticias ya resueltas;
+5. ejecuta `scripts/scan_markets.py`;
+6. activa paper trading ficticio con risk caps;
+7. genera un reporte en `outputs/reports/`;
+8. imprime update + reporte completo para delivery por Hermes.
 
 ## Variables soportadas
 
