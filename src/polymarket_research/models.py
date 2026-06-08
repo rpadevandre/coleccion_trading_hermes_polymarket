@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import json
 from typing import Any
 
@@ -30,6 +31,20 @@ def _as_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
+def _parse_datetime(value: Any) -> datetime | None:
+    if not value:
+        return None
+    text = str(value)
+    try:
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+        parsed = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
 @dataclass(frozen=True)
 class Market:
     market_id: str
@@ -43,6 +58,7 @@ class Market:
     liquidity: float
     active: bool
     closed: bool
+    end_date: str = ""
 
     @classmethod
     def from_gamma(cls, raw: dict[str, Any]) -> "Market":
@@ -61,6 +77,7 @@ class Market:
             liquidity=_as_float(raw.get("liquidity")),
             active=bool(raw.get("active", True)),
             closed=bool(raw.get("closed", False)),
+            end_date=str(raw.get("endDate") or raw.get("endDateIso") or ""),
         )
 
     def to_db_tuple(self) -> tuple[Any, ...]:
@@ -76,7 +93,21 @@ class Market:
             self.liquidity,
             int(self.active),
             int(self.closed),
+            self.end_date,
         )
+
+    def end_datetime(self) -> datetime | None:
+        return _parse_datetime(self.end_date)
+
+    def hours_to_close(self, *, now: datetime | None = None) -> float | None:
+        end = self.end_datetime()
+        if end is None:
+            return None
+        now = now or datetime.now(timezone.utc)
+        if now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
+        delta = end - now.astimezone(timezone.utc)
+        return delta.total_seconds() / 3600
 
 
 @dataclass(frozen=True)

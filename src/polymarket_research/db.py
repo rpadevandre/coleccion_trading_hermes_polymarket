@@ -30,11 +30,15 @@ def init_db(conn: sqlite3.Connection) -> None:
             liquidity REAL NOT NULL DEFAULT 0,
             active INTEGER NOT NULL DEFAULT 1,
             closed INTEGER NOT NULL DEFAULT 0,
+            end_date TEXT,
             first_seen_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
             last_seen_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         )
         """
     )
+    columns = {row[1] for row in conn.execute("PRAGMA table_info(markets)").fetchall()}
+    if "end_date" not in columns:
+        conn.execute("ALTER TABLE markets ADD COLUMN end_date TEXT")
     conn.execute(
         """
         CREATE TABLE IF NOT EXISTS signals (

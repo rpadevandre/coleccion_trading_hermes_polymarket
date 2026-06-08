@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Mapping
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import aiohttp
@@ -52,14 +53,28 @@ class PolymarketClient:
                 break
         raise PolymarketClientError(f"GET {url} failed after {self.max_retries} attempts: {last_error}")
 
-    async def markets(self, *, limit: int = 20, order: str = "volume") -> list[Market]:
+    async def markets(self, *, limit: int = 20, order: str = "volume", max_hours_to_close: int | None = None) -> list[Market]:
+        params: dict[str, Any] = {"limit": limit, "active": "true", "closed": "false", "order": order, "ascending": "false"}
+        if max_hours_to_close is not None:
+            # Prefer fast-resolving markets for paper trading feedback loops.
+            end_date_max = datetime.now(timezone.utc) + timedelta(hours=max_hours_to_close)
+            params["end_date_max"] = end_date_max.isoformat().replace("+00:00", "Z")
+            # Ask for extra rows because some returned markets can be malformed or already expired.
+            params["limit"] = max(limit * 4, limit)
         payload = await self._get_json(
             f"{self.gamma_base_url}/markets",
-            params={"limit": limit, "active": "true", "closed": "false", "order": order, "ascending": "false"},
+            params=params,
         )
         if not isinstance(payload, list):
             raise PolymarketClientError(f"Unexpected markets payload: {type(payload)!r}")
-        return [Market.from_gamma(item) for item in payload]
+        markets = [Market.from_gamma(item) for item in payload]
+        if max_hours_to_close is not None:
+            markets = [
+                market
+                for market in markets
+                if (hours := market.hours_to_close()) is not None and 0 <= hours <= max_hours_to_close
+            ]
+        return markets[:limit]
 
     async def market_by_slug(self, slug: str) -> Market | None:
         payload = await self._get_json(f"{self.gamma_base_url}/markets", params={"slug": slug})

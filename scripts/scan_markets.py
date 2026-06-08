@@ -23,9 +23,10 @@ async def scan(
     paper: bool = False,
     paper_bankroll: float = 1_000.0,
     paper_min_score: int = 80,
+    max_hours_to_close: int | None = None,
 ) -> Path:
     client = PolymarketClient()
-    markets = await client.markets(limit=limit)
+    markets = await client.markets(limit=limit, max_hours_to_close=max_hours_to_close)
 
     conn = connect(db_path)
     init_db(conn)
@@ -67,6 +68,12 @@ def main() -> None:
     parser.add_argument("--paper", action="store_true", help="Open fictional paper-trading positions for strong signals")
     parser.add_argument("--paper-bankroll", type=float, default=1_000.0, help="Fictional bankroll for paper trading")
     parser.add_argument("--paper-min-score", type=int, default=80, help="Minimum score required to open a paper position")
+    parser.add_argument(
+        "--max-hours-to-close",
+        type=int,
+        default=None,
+        help="Only scan markets whose end date is within this many hours; useful for fast paper feedback loops",
+    )
     args = parser.parse_args()
 
     report = asyncio.run(
@@ -78,6 +85,7 @@ def main() -> None:
             paper=args.paper,
             paper_bankroll=args.paper_bankroll,
             paper_min_score=args.paper_min_score,
+            max_hours_to_close=args.max_hours_to_close,
         )
     )
     print(report)

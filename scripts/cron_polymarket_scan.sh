@@ -20,8 +20,9 @@ LIMIT="${POLYMARKET_SCAN_LIMIT:-10}"
 THRESHOLD="${POLYMARKET_SIGNAL_THRESHOLD:-65}"
 PAPER_BANKROLL="${POLYMARKET_PAPER_BANKROLL:-1000}"
 PAPER_MIN_SCORE="${POLYMARKET_PAPER_MIN_SCORE:-80}"
+MAX_HOURS_TO_CLOSE="${POLYMARKET_MAX_HOURS_TO_CLOSE:-24}"
 UPDATE_OUTPUT="$(.venv/bin/python scripts/update_paper_positions.py --bankroll "$PAPER_BANKROLL")"
-REPORT_PATH="$(.venv/bin/python scripts/scan_markets.py --limit "$LIMIT" --threshold "$THRESHOLD" --paper --paper-bankroll "$PAPER_BANKROLL" --paper-min-score "$PAPER_MIN_SCORE")"
+REPORT_PATH="$(.venv/bin/python scripts/scan_markets.py --limit "$LIMIT" --threshold "$THRESHOLD" --paper --paper-bankroll "$PAPER_BANKROLL" --paper-min-score "$PAPER_MIN_SCORE" --max-hours-to-close "$MAX_HOURS_TO_CLOSE")"
 
 cat <<EOF
 # Polymarket Research Scan
@@ -30,6 +31,7 @@ Repo: rpadevandre/coleccion_trading_hermes_polymarket
 Modo: read-only research — no trades, no wallets, no dinero real.
 
 Reporte generado: $REPORT_PATH
+Filtro temporal: mercados que cierran en <= ${MAX_HOURS_TO_CLOSE}h
 
 ---
 EOF

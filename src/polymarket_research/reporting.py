@@ -17,8 +17,8 @@ def upsert_market(conn: sqlite3.Connection, market: Market) -> None:
         INSERT INTO markets (
             market_id, question, condition_id, slug, outcomes_json,
             outcome_prices_json, clob_token_ids_json, volume, liquidity,
-            active, closed
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            active, closed, end_date
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(market_id) DO UPDATE SET
             question=excluded.question,
             condition_id=excluded.condition_id,
@@ -30,6 +30,7 @@ def upsert_market(conn: sqlite3.Connection, market: Market) -> None:
             liquidity=excluded.liquidity,
             active=excluded.active,
             closed=excluded.closed,
+            end_date=excluded.end_date,
             last_seen_at=CURRENT_TIMESTAMP
         """,
         market.to_db_tuple(),
@@ -89,6 +90,7 @@ def write_scan_report(
             f"- Volume: `${market.volume:,.0f}`",
             f"- Liquidity: `${market.liquidity:,.0f}`",
             f"- Prices: `{market.outcome_prices}`",
+            f"- End date: `{market.end_date or 'unknown'}`",
             f"- Dimensions: `{score.dimensions}`",
             "- Razonamiento:",
         ]

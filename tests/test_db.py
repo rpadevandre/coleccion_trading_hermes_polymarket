@@ -29,8 +29,8 @@ def test_init_db_enables_wal_and_can_store_market(tmp_path: Path):
         INSERT INTO markets (
             market_id, question, condition_id, slug, outcomes_json,
             outcome_prices_json, clob_token_ids_json, volume, liquidity,
-            active, closed
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            active, closed, end_date
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         market.to_db_tuple(),
     )

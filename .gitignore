@@ -12,3 +12,6 @@ data/*.db
 data/*.db-wal
 data/*.db-shm
 outputs/reports/*.md
+output/businesses/*/frontend/node_modules/
+output/businesses/*/frontend/dist/
+output/businesses/*/frontend/package-lock.json
