@@ -1,33 +1,20 @@
 # Sources — Dental Insurance Checklist Assistant
 
-Research notes for internal validation. URLs are for market context only; verify before public claims.
+Web research used for market framing only. Validate pricing, workflow pain, and compliance needs directly with dental offices before building.
 
-## Market / Problem Sources
+## Market / pain references
 
-- Medusind, "Dental Insurance Verification: 5 Ways to Speed It Up" — notes that denied claims can cost dental practices significant revenue and discusses verification speed/process pain.  
-  URL: https://www.medusind.com/resources/blog/dental-insurance-verification-5-ways-to-speed-it-up
+- American Dental Association, “Dental Insurance Frequently Asked Questions” — notes common dental-office concerns including claim denials and requests for additional information.  
+  URL: https://www.ada.org/resources/practice/dental-insurance/dental-insurance-resources/dental-insurance-frequently-asked-questions
 
-- Outsource Strategies International, "Importance of Insurance Verification for Dental Practices" — explains verification as confirming patient coverage/benefits before treatment to prevent claim and patient-cost surprises.  
-  URL: https://www.outsourcestrategies.com/blog/importance-insurance-verification-dental-practices/
+- Outsource Strategies International, “Common Dental Insurance Verification Errors and How to Avoid Them” — discusses verification errors, documentation gaps, and administrative burden.  
+  URL: https://www.outsourcestrategies.com/blog/common-dental-insurance-verification-errors-avoid-them/
 
-- Flex Dental, "Insurance Verification: Maximize Efficiency and Eliminate Manual Errors" — discusses manual verification inefficiency, errors and administrative burden in dental practices.  
-  URL: https://learn.flex.dental/flex-dental-seo-blogs/insurance-verification-maximize-efficiency-and-eliminate-manual-errors
+- C&E Computech, “Dental Billing Guidelines: 10 Best Practices to Follow” — cites common rejection/postponement causes such as incomplete documentation, coding mistakes, or eligibility problems.  
+  URL: https://www.cecomputech.com/dental-billing-guidelines/
 
-## Claims Safe for Internal Use
+## How sources influence this folder
 
-- Dental insurance verification is a recognized operational pain involving eligibility, benefits, limitations and patient financial clarity.
-- Manual verification can create staff burden and risk claim rework or patient confusion.
-- MVP should avoid payment-guarantee language; benefit checks are informational and human-reviewed.
-
-## Claims Requiring Fresh Verification Before Public Use
-
-- Exact denial-rate statistics.
-- Exact time saved per verification.
-- Average monthly revenue lost to inaccurate dental benefit checks.
-- Any claim that "only X%" of offices verify insurance unless traced to a primary/credible source.
-
-## Compliance Notes
-
-- Public-facing copy should avoid implying guaranteed reimbursement.
-- Prototype should not use real patient data or insurance card images.
-- If future product handles PHI, HIPAA-grade legal, operational and technical controls are needed before pilots with live data.
+- The validation plan prioritizes paid audits because offices need proof that checklist standardization saves coordinator time.
+- The technical spec avoids guarantee language because insurance benefits are payer-processed and can change.
+- The backend motor requires human approval and source-note extraction only, because documentation quality and compliance concerns are central to the workflow.

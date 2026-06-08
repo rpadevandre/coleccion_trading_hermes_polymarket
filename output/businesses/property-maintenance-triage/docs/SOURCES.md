@@ -1,33 +1,20 @@
 # Sources — Property Maintenance Triage
 
-Research notes for internal validation. URLs are for market context only; verify before public claims.
+Web research used for market framing only. Do not treat these as product guarantees; validate directly with buyers.
 
-## Market / Problem Sources
+## Market / pain references
 
-- Property Meld, "Your Checklist to Building a Strong Property Maintenance Intake and Triage Process" — discusses maintenance intake/triage, prioritization and examples of request spikes/work-order handling.  
-  URL: https://propertymeld.com/blog/your-checklist-to-building-a-strong-property-maintenance-intake-and-triage-process/
+- Hemlane, “6 Explanations to the Cost and Time of Property Management” — cites property-management time burden and owner/operator workload framing.  
+  URL: https://www.hemlane.com/resources/cost-time-property-management/
 
-- Cove, "Tips for Your Property Management Work Order System With Limited Staff" — discusses streamlining work-order systems for property management teams operating with limited staff.  
-  URL: https://cove.is/blog-press/tips-for-your-property-management-work-order-system-with-limited-staff
-
-- Oxmaint, "Prioritize Maintenance Requests Large Portfolio" — summarizes triage concepts for urgency, impact and resource allocation across property portfolios.  
+- Oxmaint, “How to Prioritize Maintenance Requests in a Large Property Portfolio” — maintenance prioritization categories and urgency framing.  
   URL: https://oxmaint.com/industries/property-management/prioritize-maintenance-requests-large-portfolio
 
-## Claims Safe for Internal Use
+- Reddit r/PropertyManagement thread, “Maintenance triaging” — informal operator discussion showing maintenance triage is a real workflow pain, not a theoretical category. Use only as anecdotal evidence.  
+  URL: https://www.reddit.com/r/PropertyManagement/comments/1sbwtj7/maintenance_triaging/
 
-- Property maintenance intake commonly requires categorization, urgency ranking, missing-info collection and vendor routing.
-- Limited-staff property teams benefit from clearer work-order workflows and prioritization.
-- Emergency-aware triage is a key risk-control requirement for tenant maintenance operations.
+## How sources influence this folder
 
-## Claims Requiring Fresh Verification Before Public Use
-
-- Exact response-time benchmarks by jurisdiction or property type.
-- Exact maintenance volume per door.
-- Any public claim about reduction in liability, cost or SLA breaches before pilot data.
-- Any statistic copied from vendor case studies without source review.
-
-## Compliance / Operational Notes
-
-- Prototype must not process real tenant PII or real property addresses.
-- Tenant-facing outputs should avoid legal admissions, liability conclusions or guaranteed repair timelines.
-- Future live pilots need clear data retention, access control, vendor-sharing and fair-housing-aware messaging policies.
+- The validation plan emphasizes time saved per maintenance request, because property-management workload/time burden is the buyer-facing economic story.
+- The technical spec separates emergency/urgent/routine/incomplete/duplicate, because prioritization and liability-sensitive triage are core to maintenance operations.
+- The product avoids full PMS replacement and focuses on a workflow layer, because small operators often already have tools but still experience off-system message friction.
