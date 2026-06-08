@@ -31,6 +31,7 @@ Código inicial:
 - `scripts/cron_polymarket_scan.sh` — wrapper cron-friendly para entregar el reporte por Hermes/Telegram.
 - `scripts/paper_performance.py` — medición/cierre manual de posiciones ficticias y P&L simulado.
 - `scripts/update_paper_positions.py` — intenta cerrar automáticamente posiciones ficticias si el mercado ya resolvió.
+- `scripts/cron_paper_update_quiet.sh` — watcher silencioso para cron paralelo: solo avisa si cerró posiciones ficticias.
 - `src/polymarket_research/paper.py` — paper trading ficticio con bankroll y límites de riesgo.
 - `tests/` — tests iniciales de modelos, scoring y SQLite WAL.
 

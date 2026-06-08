@@ -111,3 +111,38 @@ signal generated → virtual position → resolution tracking → simulated P&L
 ```
 
 No avanzar a dinero real hasta tener evidencia de edge.
+
+## Cron paralelo silencioso
+
+Además del scan principal cada 6h, el proyecto puede correr un watcher paralelo:
+
+```text
+polymarket-paper-update-quiet
+job_id: cfe0274b98a0
+schedule: every 2h
+mode: no_agent
+deliver: origin
+```
+
+Propósito:
+
+```text
+revisar posiciones ficticias abiertas → cerrar solo si el mercado resolvió claramente → avisar solo cuando hubo cierre/P&L nuevo
+```
+
+Script repo:
+
+```bash
+scripts/cron_paper_update_quiet.sh
+```
+
+Wrapper Hermes:
+
+```bash
+~/.hermes/scripts/polymarket_paper_update_quiet.sh
+```
+
+Patrón watchdog:
+
+- si no cerró nada, stdout vacío → Hermes no manda mensaje;
+- si cerró una o más posiciones ficticias, imprime el reporte y Hermes lo entrega por Telegram.
