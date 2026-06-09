@@ -1,11 +1,71 @@
-# Admin Panel — Property Maintenance Triage
+# Property Maintenance Triage — Admin Panel Frontend
 
-Control panel scaffold.
+    This folder now contains a lightweight operator/admin panel prototype for **Property Maintenance Triage**.
 
-## First modules
+    ## Current status
 
-- Dashboard
-- Records/leads/work items
-- Rules/settings
-- Manual review
-- Metrics
+    - Frontend type: dependency-free HTML/CSS/JS admin panel.
+    - Backend target: local FastAPI app under `../backend`.
+    - Database: none connected; backend uses in-memory repository until MongoDB is approved.
+    - Purpose: let Andre inspect the admin workflow for each incubated business from GitHub and run it locally without a build step.
+
+    ## Files
+
+    ```text
+    index.html
+    styles.css
+    app.js
+    README.md
+    ROUTES.md
+    VIEWS.md
+    ```
+
+    ## Run locally
+
+    Terminal 1:
+
+    ```bash
+    cd output/businesses/property-maintenance-triage/backend
+    python -m venv .venv
+    . .venv/bin/activate
+    pip install -r requirements.txt
+    uvicorn app.main:app --reload --port 8000
+    ```
+
+    Terminal 2:
+
+    ```bash
+    cd output/businesses/property-maintenance-triage/admin
+    python -m http.server 4173
+    ```
+
+    Open:
+
+    ```text
+    http://localhost:4173
+    ```
+
+    ## Admin views represented
+
+    - Tenant Requests
+- Urgency Triage
+- Vendor Routing
+- SLA Watch
+- Tenant Summary
+
+    ## Connected API actions
+
+    ```text
+    GET  /health
+    GET  /meta
+    POST /intakes
+    POST /assessments/score
+    GET  /admin/queue
+    ```
+
+    ## Next step
+
+    Once a business is chosen as the real MVP, replace this static prototype with either:
+
+    - a React/Vite admin app, or
+    - a shared admin shell package reused across all businesses.

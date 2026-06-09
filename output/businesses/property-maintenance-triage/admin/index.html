@@ -1,0 +1,83 @@
+<!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Property Maintenance Triage Admin Panel</title>
+        <link rel="stylesheet" href="./styles.css" />
+      </head>
+      <body data-slug="property-maintenance-triage">
+        <div class="shell">
+          <aside class="sidebar">
+            <p class="eyebrow">AION Admin</p>
+            <h1>Property Maintenance Triage</h1>
+            <p class="operator">For property maintenance coordinator.</p>
+            <nav><button class="view-tab" data-view="Tenant Requests">Tenant Requests</button><button class="view-tab" data-view="Urgency Triage">Urgency Triage</button><button class="view-tab" data-view="Vendor Routing">Vendor Routing</button><button class="view-tab" data-view="SLA Watch">SLA Watch</button><button class="view-tab" data-view="Tenant Summary">Tenant Summary</button></nav>
+            <div class="api-box">
+              <label for="apiBase">FastAPI base URL</label>
+              <input id="apiBase" value="http://localhost:8000" />
+              <small>Backend currently uses in-memory storage; MongoDB is planned but disabled.</small>
+            </div>
+          </aside>
+
+          <main>
+            <section class="hero">
+              <div>
+                <p class="eyebrow">Internal operator dashboard</p>
+                <h2>Maintenance Triage Queue</h2>
+                <p>Admin frontend scaffold connected to the FastAPI contract: health, meta, intake creation, scoring, and queue review.</p>
+              </div>
+              <button id="checkHealth">Check API</button>
+            </section>
+
+            <section class="metrics">
+              <article><span>Primary metric</span><strong>Open tenant requests</strong><em id="primaryMetric">--</em></article>
+              <article><span>Secondary metric</span><strong>SLA risk tickets</strong><em id="secondaryMetric">--</em></article>
+              <article><span>API status</span><strong id="apiStatus">Not checked</strong><em>Local FastAPI</em></article>
+            </section>
+
+            <section class="grid">
+              <article class="panel wide">
+                <div class="panel-head">
+                  <h3>Create sample intake</h3>
+                  <button id="loadSample">Load sample</button>
+                </div>
+                <textarea id="samplePayload" spellcheck="false">{
+  "message": "Tenant reports water leaking under sink and possible mold smell in unit.",
+  "signals": {
+    "issue_category": "plumbing",
+    "photos_available": false,
+    "after_hours": false,
+    "unit_id": "A-204"
+  }
+}</textarea>
+                <div class="actions">
+                  <button id="createIntake">POST /intakes</button>
+                  <button id="scoreAssessment">POST /assessments/score</button>
+                </div>
+              </article>
+
+              <article class="panel">
+                <h3>Admin queue</h3>
+                <button id="loadQueue">GET /admin/queue</button>
+                <ul id="queueList" class="queue-list"></ul>
+              </article>
+
+              <article class="panel wide">
+                <h3>Operator views</h3>
+                <div class="view-grid"><article class="view-card"><span>View</span><strong>Tenant Requests</strong><p>Operational surface for property maintenance coordinator.</p></article><article class="view-card"><span>View</span><strong>Urgency Triage</strong><p>Operational surface for property maintenance coordinator.</p></article><article class="view-card"><span>View</span><strong>Vendor Routing</strong><p>Operational surface for property maintenance coordinator.</p></article><article class="view-card"><span>View</span><strong>SLA Watch</strong><p>Operational surface for property maintenance coordinator.</p></article><article class="view-card"><span>View</span><strong>Tenant Summary</strong><p>Operational surface for property maintenance coordinator.</p></article></div>
+              </article>
+
+              <article class="panel output-panel">
+                <h3>API response</h3>
+                <pre id="output">Ready.</pre>
+              </article>
+            </section>
+          </main>
+        </div>
+        <script>
+          window.ADMIN_CONFIG = {"slug": "property-maintenance-triage", "title": "Property Maintenance Triage", "operator": "property maintenance coordinator", "queue": "Maintenance Triage Queue", "primary_metric": "Open tenant requests", "secondary_metric": "SLA risk tickets", "accent": "#22c55e", "views": ["Tenant Requests", "Urgency Triage", "Vendor Routing", "SLA Watch", "Tenant Summary"], "sample": "Tenant reports water leaking under sink and possible mold smell in unit.", "signals": {"issue_category": "plumbing", "photos_available": false, "after_hours": false, "unit_id": "A-204"}};
+        </script>
+        <script src="./app.js"></script>
+      </body>
+    </html>

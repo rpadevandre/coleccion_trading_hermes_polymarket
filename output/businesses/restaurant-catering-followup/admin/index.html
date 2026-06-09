@@ -1,0 +1,83 @@
+<!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Restaurant Catering Followup Admin Panel</title>
+        <link rel="stylesheet" href="./styles.css" />
+      </head>
+      <body data-slug="restaurant-catering-followup">
+        <div class="shell">
+          <aside class="sidebar">
+            <p class="eyebrow">AION Admin</p>
+            <h1>Restaurant Catering Followup</h1>
+            <p class="operator">For catering/event manager.</p>
+            <nav><button class="view-tab" data-view="Inquiry Inbox">Inquiry Inbox</button><button class="view-tab" data-view="Event Details">Event Details</button><button class="view-tab" data-view="Quote Checklist">Quote Checklist</button><button class="view-tab" data-view="Follow-up Reminders">Follow-up Reminders</button><button class="view-tab" data-view="Booked Revenue">Booked Revenue</button></nav>
+            <div class="api-box">
+              <label for="apiBase">FastAPI base URL</label>
+              <input id="apiBase" value="http://localhost:8000" />
+              <small>Backend currently uses in-memory storage; MongoDB is planned but disabled.</small>
+            </div>
+          </aside>
+
+          <main>
+            <section class="hero">
+              <div>
+                <p class="eyebrow">Internal operator dashboard</p>
+                <h2>Catering Follow-up Queue</h2>
+                <p>Admin frontend scaffold connected to the FastAPI contract: health, meta, intake creation, scoring, and queue review.</p>
+              </div>
+              <button id="checkHealth">Check API</button>
+            </section>
+
+            <section class="metrics">
+              <article><span>Primary metric</span><strong>Open catering inquiries</strong><em id="primaryMetric">--</em></article>
+              <article><span>Secondary metric</span><strong>Event value at risk</strong><em id="secondaryMetric">--</em></article>
+              <article><span>API status</span><strong id="apiStatus">Not checked</strong><em>Local FastAPI</em></article>
+            </section>
+
+            <section class="grid">
+              <article class="panel wide">
+                <div class="panel-head">
+                  <h3>Create sample intake</h3>
+                  <button id="loadSample">Load sample</button>
+                </div>
+                <textarea id="samplePayload" spellcheck="false">{
+  "message": "Corporate lunch inquiry for 80 guests next month; quote not sent yet.",
+  "signals": {
+    "event_date": "next_month",
+    "guest_count": 80,
+    "budget": "unknown",
+    "event_type": "corporate_lunch"
+  }
+}</textarea>
+                <div class="actions">
+                  <button id="createIntake">POST /intakes</button>
+                  <button id="scoreAssessment">POST /assessments/score</button>
+                </div>
+              </article>
+
+              <article class="panel">
+                <h3>Admin queue</h3>
+                <button id="loadQueue">GET /admin/queue</button>
+                <ul id="queueList" class="queue-list"></ul>
+              </article>
+
+              <article class="panel wide">
+                <h3>Operator views</h3>
+                <div class="view-grid"><article class="view-card"><span>View</span><strong>Inquiry Inbox</strong><p>Operational surface for catering/event manager.</p></article><article class="view-card"><span>View</span><strong>Event Details</strong><p>Operational surface for catering/event manager.</p></article><article class="view-card"><span>View</span><strong>Quote Checklist</strong><p>Operational surface for catering/event manager.</p></article><article class="view-card"><span>View</span><strong>Follow-up Reminders</strong><p>Operational surface for catering/event manager.</p></article><article class="view-card"><span>View</span><strong>Booked Revenue</strong><p>Operational surface for catering/event manager.</p></article></div>
+              </article>
+
+              <article class="panel output-panel">
+                <h3>API response</h3>
+                <pre id="output">Ready.</pre>
+              </article>
+            </section>
+          </main>
+        </div>
+        <script>
+          window.ADMIN_CONFIG = {"slug": "restaurant-catering-followup", "title": "Restaurant Catering Followup", "operator": "catering/event manager", "queue": "Catering Follow-up Queue", "primary_metric": "Open catering inquiries", "secondary_metric": "Event value at risk", "accent": "#ef4444", "views": ["Inquiry Inbox", "Event Details", "Quote Checklist", "Follow-up Reminders", "Booked Revenue"], "sample": "Corporate lunch inquiry for 80 guests next month; quote not sent yet.", "signals": {"event_date": "next_month", "guest_count": 80, "budget": "unknown", "event_type": "corporate_lunch"}};
+        </script>
+        <script src="./app.js"></script>
+      </body>
+    </html>

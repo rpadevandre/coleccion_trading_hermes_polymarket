@@ -1,0 +1,83 @@
+<!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Chiropractic Reactivation Engine Admin Panel</title>
+        <link rel="stylesheet" href="./styles.css" />
+      </head>
+      <body data-slug="chiropractic-reactivation-engine">
+        <div class="shell">
+          <aside class="sidebar">
+            <p class="eyebrow">AION Admin</p>
+            <h1>Chiropractic Reactivation Engine</h1>
+            <p class="operator">For clinic growth/front desk manager.</p>
+            <nav><button class="view-tab" data-view="Patient Segments">Patient Segments</button><button class="view-tab" data-view="Message Drafts">Message Drafts</button><button class="view-tab" data-view="Suppression List">Suppression List</button><button class="view-tab" data-view="Campaign Review">Campaign Review</button><button class="view-tab" data-view="Recovered Appointments">Recovered Appointments</button></nav>
+            <div class="api-box">
+              <label for="apiBase">FastAPI base URL</label>
+              <input id="apiBase" value="http://localhost:8000" />
+              <small>Backend currently uses in-memory storage; MongoDB is planned but disabled.</small>
+            </div>
+          </aside>
+
+          <main>
+            <section class="hero">
+              <div>
+                <p class="eyebrow">Internal operator dashboard</p>
+                <h2>Reactivation Review Queue</h2>
+                <p>Admin frontend scaffold connected to the FastAPI contract: health, meta, intake creation, scoring, and queue review.</p>
+              </div>
+              <button id="checkHealth">Check API</button>
+            </section>
+
+            <section class="metrics">
+              <article><span>Primary metric</span><strong>Patients ready for outreach</strong><em id="primaryMetric">--</em></article>
+              <article><span>Secondary metric</span><strong>Recovered appointments</strong><em id="secondaryMetric">--</em></article>
+              <article><span>API status</span><strong id="apiStatus">Not checked</strong><em>Local FastAPI</em></article>
+            </section>
+
+            <section class="grid">
+              <article class="panel wide">
+                <div class="panel-head">
+                  <h3>Create sample intake</h3>
+                  <button id="loadSample">Load sample</button>
+                </div>
+                <textarea id="samplePayload" spellcheck="false">{
+  "message": "Inactive patient has not visited in 8 months and previously completed care plan phase 1.",
+  "signals": {
+    "last_visit_date": "8_months_ago",
+    "patient_status": "inactive",
+    "preferred_channel": "SMS",
+    "opt_out_status": false
+  }
+}</textarea>
+                <div class="actions">
+                  <button id="createIntake">POST /intakes</button>
+                  <button id="scoreAssessment">POST /assessments/score</button>
+                </div>
+              </article>
+
+              <article class="panel">
+                <h3>Admin queue</h3>
+                <button id="loadQueue">GET /admin/queue</button>
+                <ul id="queueList" class="queue-list"></ul>
+              </article>
+
+              <article class="panel wide">
+                <h3>Operator views</h3>
+                <div class="view-grid"><article class="view-card"><span>View</span><strong>Patient Segments</strong><p>Operational surface for clinic growth/front desk manager.</p></article><article class="view-card"><span>View</span><strong>Message Drafts</strong><p>Operational surface for clinic growth/front desk manager.</p></article><article class="view-card"><span>View</span><strong>Suppression List</strong><p>Operational surface for clinic growth/front desk manager.</p></article><article class="view-card"><span>View</span><strong>Campaign Review</strong><p>Operational surface for clinic growth/front desk manager.</p></article><article class="view-card"><span>View</span><strong>Recovered Appointments</strong><p>Operational surface for clinic growth/front desk manager.</p></article></div>
+              </article>
+
+              <article class="panel output-panel">
+                <h3>API response</h3>
+                <pre id="output">Ready.</pre>
+              </article>
+            </section>
+          </main>
+        </div>
+        <script>
+          window.ADMIN_CONFIG = {"slug": "chiropractic-reactivation-engine", "title": "Chiropractic Reactivation Engine", "operator": "clinic growth/front desk manager", "queue": "Reactivation Review Queue", "primary_metric": "Patients ready for outreach", "secondary_metric": "Recovered appointments", "accent": "#84cc16", "views": ["Patient Segments", "Message Drafts", "Suppression List", "Campaign Review", "Recovered Appointments"], "sample": "Inactive patient has not visited in 8 months and previously completed care plan phase 1.", "signals": {"last_visit_date": "8_months_ago", "patient_status": "inactive", "preferred_channel": "SMS", "opt_out_status": false}};
+        </script>
+        <script src="./app.js"></script>
+      </body>
+    </html>
