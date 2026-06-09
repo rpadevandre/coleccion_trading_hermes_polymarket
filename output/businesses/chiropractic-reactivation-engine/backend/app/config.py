@@ -1,0 +1,25 @@
+"""Runtime settings for Chiropractic Reactivation Engine."""
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_prefix="CHIROPRACTIC_REACTIVATION_ENGINE_", extra="ignore")
+
+    app_name: str = "Chiropractic Reactivation Engine API"
+    app_version: str = "0.1.0"
+    business_slug: str = "chiropractic-reactivation-engine"
+    description: str = "FastAPI backend scaffold for chiropractic clinics — no database connection enabled yet."
+    environment: str = "local"
+    allowed_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173", "http://localhost:3000"])
+
+    # Mongo-ready placeholders. Do not set real credentials in git.
+    mongo_uri: str | None = None
+    mongo_database: str = "chiropractic_reactivation_engine"
+    mongo_collection_intakes: str = "reactivation_candidate_intakes"
+    mongo_collection_assessments: str = "reactivation_candidate_assessments"
+    mongo_collection_audit_events: str = "audit_events"
+    enable_mongo: bool = False
+
+
+settings = Settings()
