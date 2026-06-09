@@ -84,7 +84,9 @@ async def update(db_path: Path, bankroll: float) -> str:
     else:
         lines += ["No había posiciones con resolución clara todavía.", ""]
 
-    lines.append(render_summary(performance_summary(conn, bankroll=bankroll)))
+    summary = performance_summary(conn, bankroll=bankroll)
+    conn.commit()
+    lines.append(render_summary(summary))
     return "\n".join(lines)
 
 

@@ -2,7 +2,7 @@ from pathlib import Path
 
 from polymarket_research.db import connect, init_db
 from polymarket_research.models import Market, ScoreBreakdown
-from polymarket_research.paper import PaperTradingConfig, maybe_open_paper_position, portfolio_summary
+from polymarket_research.paper import PaperTradingConfig, close_paper_position, maybe_open_paper_position, portfolio_summary
 
 
 def _market(price: float = 0.62, market_id: str = "m-paper-1") -> Market:
@@ -82,3 +82,58 @@ def test_paper_trade_respects_score_and_total_exposure_caps(tmp_path: Path):
     assert summary["open_positions"] == 1
     assert summary["open_exposure"] == 10.0
     assert summary["available_cash"] == 90.0
+
+
+def test_open_position_debits_persistent_cash_and_writes_ledger(tmp_path: Path):
+    conn = connect(tmp_path / "paper.db")
+    init_db(conn)
+    config = PaperTradingConfig(bankroll=100, max_risk_per_trade_pct=0.10, max_total_exposure_pct=0.50)
+
+    maybe_open_paper_position(conn, _market(market_id="m-cash-1"), _score(), config=config)
+    maybe_open_paper_position(conn, _market(market_id="m-cash-2"), _score(), config=config)
+
+    summary = portfolio_summary(conn, bankroll=100)
+    assert summary["bankroll"] == 100.0
+    assert summary["available_cash"] == 80.0
+    assert summary["open_exposure"] == 20.0
+
+    ledger_rows = conn.execute("SELECT event_type, market_id, amount FROM paper_ledger ORDER BY id").fetchall()
+    assert ledger_rows == [
+        ("OPEN", "m-cash-1", -10.0),
+        ("OPEN", "m-cash-2", -10.0),
+    ]
+
+
+def test_close_position_credits_payout_and_records_win_loss_trace(tmp_path: Path):
+    conn = connect(tmp_path / "paper.db")
+    init_db(conn)
+    config = PaperTradingConfig(bankroll=100, max_risk_per_trade_pct=0.10, max_total_exposure_pct=0.50)
+
+    maybe_open_paper_position(conn, _market(price=0.25, market_id="m-win"), _score(), config=config)
+    maybe_open_paper_position(conn, _market(price=0.50, market_id="m-loss"), _score(), config=config)
+
+    win = close_paper_position(conn, "m-win", winning_side="YES")
+    loss = close_paper_position(conn, "m-loss", winning_side="NO")
+
+    assert win is not None
+    assert win["outcome"] == "WIN"
+    assert win["winning_side"] == "YES"
+    assert win["payout"] == 40.0
+    assert win["pnl"] == 30.0
+    assert loss is not None
+    assert loss["outcome"] == "LOSS"
+    assert loss["winning_side"] == "NO"
+    assert loss["payout"] == 0.0
+    assert loss["pnl"] == -10.0
+
+    summary = portfolio_summary(conn, bankroll=100)
+    assert summary["available_cash"] == 120.0
+    assert summary["realized_pnl"] == 20.0
+
+    ledger_rows = conn.execute("SELECT event_type, market_id, amount, cash_balance_after FROM paper_ledger ORDER BY id").fetchall()
+    assert ledger_rows == [
+        ("OPEN", "m-win", -10.0, 90.0),
+        ("OPEN", "m-loss", -10.0, 80.0),
+        ("CLOSE_WIN", "m-win", 40.0, 120.0),
+        ("CLOSE_LOSS", "m-loss", 0.0, 120.0),
+    ]

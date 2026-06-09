@@ -78,8 +78,46 @@ def init_db(conn: sqlite3.Connection) -> None:
             opened_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
             closed_at TEXT,
             exit_price REAL,
+            payout REAL,
             pnl REAL,
+            winning_side TEXT,
+            outcome TEXT,
             FOREIGN KEY (market_id) REFERENCES markets(market_id)
+        )
+        """
+    )
+    paper_columns = {row[1] for row in conn.execute("PRAGMA table_info(paper_positions)").fetchall()}
+    for column, definition in {
+        "payout": "REAL",
+        "winning_side": "TEXT",
+        "outcome": "TEXT",
+    }.items():
+        if column not in paper_columns:
+            conn.execute(f"ALTER TABLE paper_positions ADD COLUMN {column} {definition}")
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS paper_account (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            initial_bankroll REAL NOT NULL,
+            cash_balance REAL NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS paper_ledger (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_type TEXT NOT NULL,
+            market_id TEXT,
+            position_id INTEGER,
+            amount REAL NOT NULL,
+            cash_balance_after REAL NOT NULL,
+            note TEXT,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (market_id) REFERENCES markets(market_id),
+            FOREIGN KEY (position_id) REFERENCES paper_positions(id)
         )
         """
     )

@@ -50,6 +50,8 @@ async def scan(
     conn.commit()
 
     summary = performance_summary(conn, bankroll=paper_bankroll) if paper else None
+    if paper:
+        conn.commit()
     return write_scan_report(
         report_dir,
         scored,
