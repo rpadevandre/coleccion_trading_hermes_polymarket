@@ -1,46 +1,57 @@
-import React from 'react';
-import { businessMeta, frontendViews } from '../businessMeta';
+import type { CSSProperties } from 'react';
+import { useState } from 'react';
+import { businessMeta, frontendViews, sampleLeads } from '../businessMeta';
 import '../styles.css';
 
-const viewMeta = frontendViews.find((view) => view.name === 'InstagramDMFlow') ?? {
-  name: 'InstagramDMFlow',
-  path: '/instagram-d-m-flow',
-  description: 'Demo DM/form/call to consult flow.',
-  primaryOutcome: 'Validate buyer demand and move qualified users into a pilot.'
-};
+const viewMeta = frontendViews.find((view) => view.name === 'InstagramDMFlow') ?? frontendViews[0];
+const accentStyle = { '--accent': businessMeta.accent, '--accent-dark': businessMeta.accentDark } as CSSProperties;
 
 export default function InstagramDMFlow() {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const selectedLead = sampleLeads[selectedIndex];
+
   return (
-    <main className="business-page" style={{ '--accent': businessMeta.accent } as React.CSSProperties}>
-      <section className="hero">
-        <p className="eyebrow">{businessMeta.name}</p>
-        <h1>{viewMeta.name}</h1>
+    <main className="business-page" style={accentStyle}>
+      <section className="hero compact-hero">
+        <p className="eyebrow">No real customer data demo</p>
+        <h1>DM, form and missed-call recovery flow</h1>
         <p className="lede">{viewMeta.description}</p>
-        <p className="metric">{businessMeta.metric}</p>
+        <p className="metric">{viewMeta.primaryOutcome}</p>
       </section>
 
-  <section className="card">
-    <h2>Demo sequence</h2>
-    <ol>
-      <li>Capture source event or message.</li>
-      <li>AI extracts structured fields with confidence.</li>
-      <li>Human reviews suggested action.</li>
-      <li>Admin panel tracks outcome and audit trail.</li>
-    </ol>
-  </section>
+      <section className="flow-layout">
+        <div className="card">
+          <h2>Sample lead queue</h2>
+          <div className="lead-list">
+            {sampleLeads.map((lead, index) => (
+              <button className={index === selectedIndex ? 'lead-card selected' : 'lead-card'} type="button" key={lead.intent} onClick={() => setSelectedIndex(index)}>
+                <span>{lead.source}</span>
+                <strong>{lead.intent}</strong>
+                <small>{lead.age} • {lead.value} • {lead.risk} risk</small>
+              </button>
+            ))}
+          </div>
+        </div>
 
-  <section className="card">
-    <h2>Primary outcome</h2>
-    <p>{viewMeta.primaryOutcome}</p>
-  </section>
-
-  <section className="card">
-    <h2>CTA</h2>
-    <button type="button">Book a workflow audit</button>
-  </section>
-      <section className="guardrail">
-        <strong>Human-in-loop:</strong> AI suggestions stay reviewable, auditable and reversible before any customer-facing action.
+        <div className="card review-card">
+          <p className="eyebrow">Coordinator review</p>
+          <h2>{selectedLead.intent}</h2>
+          <dl className="detail-list">
+            <div><dt>Source</dt><dd>{selectedLead.source}</dd></div>
+            <div><dt>Age</dt><dd>{selectedLead.age}</dd></div>
+            <div><dt>Estimated value</dt><dd>{selectedLead.value}</dd></div>
+            <div><dt>Booking risk</dt><dd>{selectedLead.risk}</dd></div>
+          </dl>
+          <label className="draft-box">Human-approved draft<textarea value={selectedLead.draft} readOnly /></label>
+          <div className="cta-row">
+            <button type="button">Approve draft</button>
+            <button className="secondary-button" type="button">Ask AI to revise</button>
+          </div>
+          <p className="helper-text">Empty state copy: when there are no leads, show “Connect a source or upload anonymized counts to preview recovery tasks.”</p>
+        </div>
       </section>
+
+      <section className="guardrail"><strong>Safety state:</strong> Drafts are suggestions for staff. The prototype intentionally avoids sending messages or making treatment claims.</section>
     </main>
   );
 }
