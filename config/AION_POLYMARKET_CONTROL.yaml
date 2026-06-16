@@ -1,0 +1,36 @@
+# AION Polymarket Control State
+# Default: PAPER_ONLY. Do not change to ON without explicit Andre approval and live-wallet setup.
+mode: PAPER_ONLY  # PAPER_ONLY | ON | OFF | CASH_OUT
+
+capital_budget_pusd: 0
+max_order_pusd: 0
+max_market_exposure_pusd: 0
+max_total_open_exposure_pusd: 0
+max_slippage_bps: 300
+min_liquidity_pusd: 500
+
+allowed_categories: []
+blocked_categories: []
+blocked_markets: []
+allowed_market_slugs: []
+
+cash_out:
+  enabled: false
+  amount_pusd: null
+  percent: null
+  market_slug: null
+  urgency: conservative  # conservative | normal | urgent
+
+live_execution:
+  enabled: false
+  requires_separate_wallet: true
+  requires_env_credentials: true
+  nautilus_enabled: false
+  last_reconciliation_status: unknown
+
+updated_by: AION
+updated_at: 2026-06-16
+notes:
+  - "No private keys in repo, memory, chat, or committed files."
+  - "This config is a control contract, not a permission to trade live."
+  - "PAPER_ONLY remains default until Andre explicitly approves live micro-wallet mode."
